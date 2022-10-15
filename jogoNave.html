@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/jogoNaveCss.css">
+    <title>Jogo de Nave</title>
+</head>
+<body>
+
+    <form class="site">
+   
+    <canvas></canvas>
+<div class="divPontos">
+    <span id="poder">Poder:2</span>
+<span id="pontos" class="pontos">Pontos:0</span>
+<span id="highscore" class="pontos">highscore:0</span>
+
+</div>
+   
+
+<input type="submit" id="comecar" value="Começar">
+    <div class="morte">
+        
+        <span id="morte"></span>
+    </div>
+</form>
+</body>
+</html>
+
+
+<script>
+    const tela = document.querySelector('canvas')
+    const pincel = tela.getContext('2d')
+    const pontos = document.querySelector('#pontos')
+    const highscore = document.querySelector('#highscore')
+    const botao = document.querySelector('#comecar')
+    const morte = document.querySelector('#morte')
+    const poder = document.querySelector('#poder')
+
+    console.log(300 % 100)
+
+    let naveX = 150
+    let naveY = 129
+    let inimigoX = Math.round(Math.random() * 230)
+    let inimigoY = -20
+    let vel = 5
+    let velInmigo = 2
+    let tiroY = naveY - 10
+    let tiroX = naveX - 5
+    let destruiu = false
+    let pontuacao = 0
+    let maiorPontuacao = 0
+    let comecar = false
+    let tempoParado = false
+    let poderContador = 2
+    let esquerda = false
+    let direita = false
+
+
+    function atualiza(){
+       if(comecar){
+        limpa()
+        desenhaNave()
+        desenhaNaveInimiga()
+        colideInimigo()
+
+        if(direita){
+            naveX += vel
+        }
+
+        if(esquerda){
+            naveX -= vel
+        }
+
+       }
+
+    }
+
+    function desenhaNave (){
+        pincel.fillStyle = 'white'
+        pincel.fillRect(naveX,naveY,10,20)
+       // movimentaNave()
+
+    }
+
+    function desenhaNaveInimiga (){
+        
+        if(inimigoX % 5 == 0){
+        if(destruiu == false){
+        pincel.fillStyle = 'red'
+        pincel.fillRect(inimigoX,inimigoY,10,20)
+        
+        if(tempoParado == false){
+        inimigoY += velInmigo
+        }
+        }
+       if(destruiu){
+            destruiu = false
+            inimigoX = Math.round(Math.random() * 230)
+            inimigoY = -20
+            desenhaNaveInimiga()
+        }} else {
+            inimigoX = Math.round(Math.random() * 230)
+        }
+
+    }
+
+    function limpa(){
+        pincel.clearRect(0,0,400,400)
+       
+
+    }
+
+
+
+    function movimentaNave(e){
+        
+        if(naveX < 1){
+            naveX = 300
+        }
+            if(e.keyCode == 37){
+            esquerda = true
+        }
+    
+
+    if(naveX > 300){
+        naveX = 0
+
+    }
+        if(e.keyCode == 39){
+            direita = true
+        }
+
+    
+
+   
+    }
+
+    function atira(e){
+        if(comecar){
+        if(e.keyCode == 32){        
+        
+            while(tiroY > 1){
+        tiroX = naveX + 5
+        pincel.beginPath()
+        pincel.fillStyle = 'yellow'
+        pincel.arc(tiroX,tiroY,2.5,0,Math.PI * 2)
+        pincel.fill()
+        tiroY--
+        destroi()
+            }
+        tiroY = naveY - 1
+        }
+
+        if(e.keyCode == 16){
+            if(poderContador > 0){
+           
+            
+                poderContador--
+           poder.innerHTML = 'Poder:' + poderContador
+           tempoParado = true
+           setTimeout(function(){tempoParado = false},3000)
+            
+            }
+
+        }
+
+    }
+}
+
+    function destroi(){
+        if(tiroY == inimigoY && tiroX - 5  == inimigoX){
+            destruiu = true
+            velInmigo = Math.round(Math.random() * 2) + 1
+            pontuacao += 10
+            pontos.innerHTML = 'Pontos:' + pontuacao
+            if(pontuacao > maiorPontuacao){
+                maiorPontuacao = pontuacao
+            }
+            
+        }
+        
+
+
+    }
+    
+    function colideInimigo(){
+
+        if(inimigoY > naveY + 5){
+         destruiu = true
+         pontuacao = 0
+        pontos.innerHTML = 'Pontos:' + pontuacao
+        highscore.innerHTML = 'HighScore:' + maiorPontuacao
+        morte.innerHTML = 'Você morreu 👍'
+        comecar = false
+        poderContador = 2
+        poder.innerHTML = 'Poder:' + poderContador
+        naveX = 150
+        }
+    }
+
+
+
+
+    setInterval(atualiza,50)
+
+    document.addEventListener('keydown', movimentaNave)
+    document.addEventListener('keyup', function(e){
+        if(e.keyCode == 37){
+            esquerda = false
+        }
+        if(e.keyCode == 39){
+            direita = false
+        }
+    })
+    document.addEventListener('keydown', atira)
+   
+
+    botao.addEventListener('click',function(e){
+        e.preventDefault()
+        comecar = true
+        morte.innerHTML = ''
+    })
+
+</script>

@@ -1,0 +1,71 @@
+
+
+
+body {
+   
+    padding-top: 10%;
+
+
+}
+
+
+canvas {
+    width: 400px;
+    height: 400px;
+    background-color: black;
+
+
+}
+
+
+html {
+    background-color: lightgray;
+    text-align: center;
+
+
+}
+
+span {
+    font-size: 22px;
+    font-weight: bold;
+    font-family: sans-serif;
+
+
+}
+
+#pontos{
+    padding-right: 50px;
+}
+
+input{
+   
+    font-size: 22px;
+    background-color: white;
+    color:black
+
+
+}
+
+input:hover{
+ 
+    background-color: black;
+    color:white;
+    cursor:pointer;
+
+}
+
+form{
+    padding-bottom: 100px;
+
+}
+
+#morte {
+    padding-top: 20px;
+    
+
+}
+
+#poder {
+    margin-right: 50px;
+
+}
